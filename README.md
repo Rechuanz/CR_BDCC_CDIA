@@ -125,10 +125,36 @@ curl -X POST http://127.0.0.1:8000/api/talhoes/ \
 
 A configuração de deploy já está pronta em `.ebextensions/django.config`. Ela aponta o `WSGIPath` para `lavoura_inteligente/wsgi.py`, define `DJANGO_SETTINGS_MODULE` e roda `migrate` e `collectstatic` a cada deploy.
 
+Aplicação publicada: http://cr-cdia.us-east-1.elasticbeanstalk.com
+
+- API: http://cr-cdia.us-east-1.elasticbeanstalk.com/api/
+- Admin: http://cr-cdia.us-east-1.elasticbeanstalk.com/admin/
+
+### Publicando
+
+1. Gere o pacote `app.zip` com o código do projeto, sem `.venv`, `db.sqlite3` e `__pycache__`:
+
+   ```bash
+   zip -r app.zip .ebextensions .elasticbeanstalk lavoura_inteligente lavoura media manage.py Procfile requirements.txt -x '*/__pycache__/*' '*.pyc' '*.DS_Store'
+   ```
+
+2. No console do Elastic Beanstalk (região `us-east-1`), envie o `app.zip` em **Upload and deploy**.
+
+Com o EB CLI instalado, o mesmo resultado sai de `eb deploy`.
+
+### Criando o administrador no servidor
+
+O banco SQLite do servidor é criado pelo `migrate` do deploy, então o superusuário criado localmente não existe lá. Depois do deploy:
+
 ```bash
-eb init
-eb create
-eb deploy
+eb ssh
+source /var/app/venv/*/bin/activate
+cd /var/app/current
+python manage.py createsuperuser
 ```
+
+O banco fica dentro da instância. Se o ambiente for recriado, o banco e o administrador são perdidos e precisam ser criados de novo.
+
+### Configuração
 
 O `DJANGO_DEBUG` fica `False` no Elastic Beanstalk. Para liberar outros domínios, defina a variável `DJANGO_ALLOWED_HOSTS` no ambiente.
