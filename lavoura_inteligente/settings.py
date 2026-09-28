@@ -13,8 +13,6 @@ DEBUG = True if os.getenv('DJANGO_DEBUG', 'True') == 'True' else False
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-jws812gs-!utj)3qyg+aurpf170cq7ex3@_44hz$cr2dac1heh'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
