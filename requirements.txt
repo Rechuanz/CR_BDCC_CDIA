@@ -1,0 +1,4 @@
+Django==4.2.30
+djangorestframework==3.16.1
+pillow==11.3.0
+gunicorn==23.0.0

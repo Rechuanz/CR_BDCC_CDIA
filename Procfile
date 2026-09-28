@@ -1,0 +1,1 @@
+web: gunicorn lavoura_inteligente.wsgi:application --bind 127.0.0.1:8000
